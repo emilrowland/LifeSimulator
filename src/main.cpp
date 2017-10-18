@@ -17,7 +17,7 @@ int main(){
             cout << "Hunger: " << human1.hunger << endl;
             cout << "Money: " << human1.money << endl;
         }
-        if(date.month == 8){
+        if(date.year == 2018){
             break;
         }
         std::string what = human1.tick();

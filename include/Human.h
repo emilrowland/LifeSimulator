@@ -2,15 +2,8 @@
 #define HUMAN_H
 
 #include <string>
-#include <queue>
+#include "PriorityQueueOrder.h"
 #include "Storage.h"
-
-struct todo {
-    int priority;
-    std::string what;
-    bool operator<(const todo& other)const
-    { return priority > other.priority; }
-};
 
 class Human
 {
@@ -26,7 +19,7 @@ class Human
     protected:
         void eat();
     private:
-        std::priority_queue<todo*> todoQueue;
+        PriorityQueueOrder<std::string> todoQueue;
         Storage inventory = Storage(0.000546);
 };
 
