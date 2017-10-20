@@ -2,7 +2,23 @@
 #include "Human.h"
 #include "Date.h"
 
+#include "TaskQueue.h"
+
 using namespace std;
+
+
+void test(){
+    TaskQueue<int> tasks = TaskQueue<int>(10);
+    for(int i = 5; i > 0; i--){
+        tasks.push(i,i);
+    }
+    for(int i = 0; i < 5; i++){
+        tasks.push(i,i);
+    }
+    tasks.print();
+    std::cout << tasks.pop() << std::endl;
+    tasks.print();
+}
 
 int main(){
     Date date = Date(2017,6,1,12,0,0); //2017-06-01 12:00:00
@@ -30,5 +46,6 @@ int main(){
         }
         date.tick(1);
     }
+    //test();
     return 0;
 }
