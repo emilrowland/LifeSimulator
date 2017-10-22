@@ -2,7 +2,7 @@
 #define HUMAN_H
 
 #include <string>
-#include "PriorityQueueOrder.h"
+#include "TaskQueue.h"
 #include "Storage.h"
 
 class Human
@@ -19,7 +19,7 @@ class Human
     protected:
         void eat();
     private:
-        PriorityQueueOrder<std::string> todoQueue;
+        TaskQueue<std::string> todoQueue = TaskQueue<std::string>(50);
         Storage inventory = Storage(0.000546);
 };
 
