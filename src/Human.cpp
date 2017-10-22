@@ -24,7 +24,7 @@ std::string Human::tick(){
     }
     if(Human::hunger > 6){
         //Want to eat
-        Human::todoQueue.push("Eat", 1);
+        Human::todoQueue.push("Eat", 5);
     }
     Human::hunger += 0.0002;
     if(Human::hunger > 100){ //Dead to hungry

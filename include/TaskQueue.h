@@ -18,17 +18,18 @@
 */
 
 #include <iostream>
+#include <vector>
 
 template <class T>
 class TaskQueue{
     private:
-        int maxSize;
-        int currentSeq = 0;
-        int endPos = 0;
+        unsigned short int maxSize;
+        unsigned short int currentSeq = 0;
+        unsigned short int endPos = 0;
         struct item {
-            int priority;
+            unsigned short int priority;
             T obj;
-            int seq;
+            unsigned short int seq;
             item* next = nullptr;
             bool operator>(const item& other)const{
                 if(priority == other.priority){
@@ -39,21 +40,21 @@ class TaskQueue{
         };
         item** heapArray;
     public:
-        TaskQueue(int predSize=100){
+        TaskQueue(unsigned short int predSize=100){
             TaskQueue::maxSize = predSize;
             TaskQueue::heapArray = new item*[predSize];
         }
         void print(){
-            for(int i = 0; i < TaskQueue::endPos; i++){
-                std::cout << "Priority: " << TaskQueue::heapArray[i]->priority << " Seq: " << TaskQueue::heapArray[i]->seq << std::endl;
+            for(unsigned short int i = 0; i < TaskQueue::endPos; i++){
+                std::cout << "Priority: " << TaskQueue::heapArray[i]->priority << " Seq: " << TaskQueue::heapArray[i]->seq << " Object: " << TaskQueue::heapArray[i]->obj << std::endl;
             }
         }
     private:
-        void bubbleUp(int index){//Sort upwards
+        void bubbleUp(unsigned short int index){//Sort upwards
             if(index == 0){
                 return;
             }
-            int parentIndex = (index-1)/2; //Floor 2.8 => 2
+            unsigned short int parentIndex = (index-1)/2; //Floor 2.8 => 2
             if(*TaskQueue::heapArray[parentIndex] > *TaskQueue::heapArray[index]){
                 item* temp = heapArray[parentIndex];
                 TaskQueue::heapArray[parentIndex] = TaskQueue::heapArray[index];
@@ -61,13 +62,13 @@ class TaskQueue{
                 TaskQueue::bubbleUp(parentIndex);
             }
         }
-        void bubbleDown(int index){
-            int leftChildIndex = 2*index + 1;
-            int rightChildIndex = 2*index + 2;
+        void bubbleDown(unsigned short int index){
+            unsigned short int leftChildIndex = 2*index + 1;
+            unsigned short int rightChildIndex = 2*index + 2;
             if(leftChildIndex >= TaskQueue::endPos){
                 return; //index is a leaf
             }
-            int minIndex = index;
+            unsigned short int minIndex = index;
             if(*TaskQueue::heapArray[index] > *TaskQueue::heapArray[leftChildIndex]){
                 minIndex = leftChildIndex;
             }
@@ -83,7 +84,7 @@ class TaskQueue{
             }
         }
     public:
-        void push(T obj, int priority){
+        void push(T obj, unsigned short int priority){
             item* i = new item();
             i->obj = obj;
             i->priority = priority;
@@ -111,7 +112,7 @@ class TaskQueue{
             return ret;
         }
         T top(){return TaskQueue::heapArray[0]->obj;}
-        bool isEmpty(){
+        bool empty(){
             if(TaskQueue::endPos == 0){
                 TaskQueue::currentSeq = 0;
                 return true;
@@ -119,7 +120,7 @@ class TaskQueue{
             return false;
         }
         virtual ~TaskQueue(){
-            while(!TaskQueue::isEmpty()){
+            while(!TaskQueue::empty()){
                 TaskQueue::pop();
             }
             delete TaskQueue::heapArray;
@@ -139,49 +140,124 @@ class TaskQueue{
                     TaskQueue::bubbleDown(i);
                     return true;
                 }
-                while(currentItem->next){
-                    if(obj == currentItem->next->obj){
+                item* prevItem = currentItem;
+                while(prevItem->next){
+                    currentItem = prevItem->next;
+                    if(obj == currentItem->obj){
                         //Found
-                        item* temp = currentItem->next;
-                        currentItem->next = temp->next;
-                        delete temp;
-                        TaskQueue::bubbleDown(i); // FIX test for up or down.
+                        prevItem->next = currentItem->next;
+                        delete currentItem;
                         return true;
                     }
-                    item* currentItem = currentItem->next;
+                    prevItem = currentItem;
                 }
             }
             return false;
         }
-        /*bool changePriorityOfFirstMatch(T obj){
+        bool changePriorityOfFirstMatch(T obj, unsigned short int newPriority){
+            for(unsigned short int i = 0; i < TaskQueue::endPos; i++){
+                item* currentItem = TaskQueue::heapArray[i];
+                if(obj == currentItem->obj){
+                    //Found
+                    unsigned short int oldPriority = currentItem->priority;
+                    currentItem->priority = newPriority;
+                    if(oldPriority < newPriority){
+                        TaskQueue::bubbleDown(i);
+                    }else if(oldPriority > newPriority){
+                        TaskQueue::bubbleUp(i);
+                    }
+                    return true;
+                }
+                std::vector<item*> prevItems;
+                item* prevItem = currentItem;
+                while(prevItem->next){
+                    prevItems.push_back(prevItem);
+                    currentItem = prevItem->next;
+                    if(obj == currentItem->obj){
+                        //Found
+                        unsigned short int oldPriority = currentItem->priority;
+                        currentItem->priority = newPriority;
+                        if(oldPriority > newPriority){
+                            //Change priority on all the items before.
+                            for(unsigned int i = 0; i < prevItems.size(); i++){
+                                prevItems.at(i)->priority = newPriority;
+                            }
+                        }
+                        return true;
+                    }
+                    prevItem = currentItem;
+                }
+            }
+            return false;
+        }
+        bool addDependencie(T obj, T dependencie, short int dependenciePriority = -1){
             for(int i = 0; i < TaskQueue::endPos; i++){
                 item* currentItem = TaskQueue::heapArray[i];
                 if(obj == currentItem->obj){
                     //Found
-                    if(i == endPos-1){
-                        TaskQueue::endPos--;
+                    item* depItem = new item();
+                    depItem->obj = dependencie;
+                    if(dependenciePriority < currentItem->priority && dependenciePriority >= 0){
+                        depItem->priority = dependenciePriority;
                     }else{
-                        TaskQueue::heapArray[i] = TaskQueue::heapArray[TaskQueue::endPos-1];
-                        TaskQueue::endPos--;
+                        depItem->priority = currentItem->priority;
                     }
-                    delete currentItem;
-                    TaskQueue::bubbleDown(i);
+                    depItem->seq = currentItem->seq;
+                    depItem->next = currentItem;
+                    TaskQueue::heapArray[i] = depItem;
                     return true;
-                }
-                while(currentItem->next){
-                    if(obj == currentItem->next->obj){
-                        //Found
-                        item* temp = currentItem->next;
-                        currentItem->next = temp->next;
-                        delete temp;
-                        TaskQueue::bubbleDown(i);
-                        return true;
-                    }
-                    item* currentItem = currentItem->next;
                 }
             }
             return false;
-        }*/
+        }
+        void addDependencieTop(T dependencie, short int dependenciePriority = -1){
+            if(TaskQueue::endPos != 0){
+                item* currentItem = TaskQueue::heapArray[0];
+                item* depItem = new item();
+                depItem->obj = dependencie;
+                if(dependenciePriority < currentItem->priority && dependenciePriority >= 0){
+                    depItem->priority = dependenciePriority;
+                }else{
+                    depItem->priority = currentItem->priority;
+                }
+                depItem->seq = currentItem->seq;
+                depItem->next = currentItem;
+                TaskQueue::heapArray[0] = depItem;
+            }
+        }
 };
+
+/*
+void test(){
+    TaskQueue<int> tasks = TaskQueue<int>(10);
+    for(int i = 5; i > 0; i--){
+        tasks.push(i,i);
+    }
+    for(int i = 0; i < 5; i++){
+        tasks.push(i,i);
+    }
+    tasks.print();
+    std::cout << tasks.pop() << std::endl;
+    tasks.print();
+    std::cout << "Deleted first 3" << std::endl;
+    tasks.deleteFirstMatch(3);
+    tasks.print();
+    std::cout << "Deleted first 5" << std::endl;
+    tasks.deleteFirstMatch(5);
+    tasks.print();
+    std::cout << "Deleted first 1" << std::endl;
+    tasks.deleteFirstMatch(1);
+    tasks.print();
+    std::cout << "Change priority on 1 to 99" << std::endl;
+    tasks.changePriorityOfFirstMatch(1, 99);
+    tasks.print();
+    std::cout << "Change priority on 3 to 0" << std::endl;
+    tasks.changePriorityOfFirstMatch(3, 0);
+    tasks.print();
+    while(!tasks.empty()){
+        std::cout << tasks.pop() << std::endl;
+    }
+}
+*/
 
 #endif // TASKQUEUE_H_INCLUDED

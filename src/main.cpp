@@ -2,38 +2,10 @@
 #include "Human.h"
 #include "Date.h"
 
-#include "TaskQueue.h"
-
 using namespace std;
 
-
-void test(){
-    TaskQueue<int> tasks = TaskQueue<int>(10);
-    for(int i = 5; i > 0; i--){
-        tasks.push(i,i);
-    }
-    for(int i = 0; i < 5; i++){
-        tasks.push(i,i);
-    }
-    tasks.print();
-    std::cout << tasks.pop() << std::endl;
-    tasks.print();
-    std::cout << "Deleted first 3" << std::endl;
-    tasks.deleteFirstMatch(3);
-    tasks.print();
-    std::cout << "Deleted first 5" << std::endl;
-    tasks.deleteFirstMatch(5);
-    tasks.print();
-    std::cout << "Deleted first 1" << std::endl;
-    tasks.deleteFirstMatch(1);
-    tasks.print();
-    while(!tasks.isEmpty()){
-        std::cout << tasks.pop() << std::endl;
-    }
-}
-
 int main(){
-    /*Date date = Date(2017,6,1,12,0,0); //2017-06-01 12:00:00
+    Date date = Date(2017,6,1,12,0,0); //2017-06-01 12:00:00
     cout << "Creating Human" << endl;
     Human human1 = Human();
     cout << human1.firstName << " " << human1.lastName << endl;
@@ -57,7 +29,6 @@ int main(){
             }
         }
         date.tick(1);
-    }*/
-    test();
+    }
     return 0;
 }
