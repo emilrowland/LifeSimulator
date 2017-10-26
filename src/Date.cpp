@@ -23,7 +23,6 @@ std::string Date::toString(){
 }
 
 void Date::add(Date date){
-    //int daysInMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     int daysInMonth[12] = {32, 29, 32, 31, 32, 31, 32, 32, 31, 32, 31, 32};
     int s = (Date::second + date.second);
     Date::second = s % 60;
@@ -49,4 +48,72 @@ void Date::tick(int second){
         throw std::invalid_argument("Not an valid Date!");
     }
     Date::add(Date(0,0,0,0,0,second));
+}
+
+bool Date::operator <=(const Date& other){
+    if(this->year < other.year){
+        return true;
+    }else if(this->year > other.year){
+        return false;
+    }
+    if(this->month < other.month){
+        return true;
+    }else if(this->month > other.month){
+        return false;
+    }
+    if(this->day < other.day){
+        return true;
+    }else if(this->day > other.day){
+        return false;
+    }
+    if(this->hour < other.hour){
+        return true;
+    }else if(this->hour > other.hour){
+        return false;
+    }
+    if(this->minute < other.minute){
+        return true;
+    }else if(this->minute > other.minute){
+        return false;
+    }
+    if(this->second < other.second){
+        return true;
+    }else if(this->second > other.second){
+        return false;
+    }
+    return true; //They are equal
+}
+
+bool Date::operator <(const Date& other){
+    if(this->year < other.year){
+        return true;
+    }else if(this->year > other.year){
+        return false;
+    }
+    if(this->month < other.month){
+        return true;
+    }else if(this->month > other.month){
+        return false;
+    }
+    if(this->day < other.day){
+        return true;
+    }else if(this->day > other.day){
+        return false;
+    }
+    if(this->hour < other.hour){
+        return true;
+    }else if(this->hour > other.hour){
+        return false;
+    }
+    if(this->minute < other.minute){
+        return true;
+    }else if(this->minute > other.minute){
+        return false;
+    }
+    if(this->second < other.second){
+        return true;
+    }else if(this->second > other.second){
+        return false;
+    }
+    return false;//Should never come here
 }

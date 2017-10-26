@@ -17,17 +17,22 @@ std::string Human::tick(){
     if(!Human::todoQueue.empty()){
         std::string todo = Human::todoQueue.top();
         if(todo == "Eat"){
-            Human::todoQueue.pop();
-            Human::eat();
-            what = "Eat";
+            int status = Human::eat();
+            if(status == 2){
+                what = "No money can't eat";
+            }else{
+                what = "Eat";
+                Human::todoQueue.pop();
+            }
         }
     }
-    if(Human::hunger > 6){
-        //Want to eat
+    if(Human::hunger > 25){
+        Human::todoQueue.push("Eat", 1);
+    }else if(Human::hunger > 6){
         Human::todoQueue.push("Eat", 5);
     }
     Human::hunger += 0.0002;
-    if(Human::hunger > 100){ //Dead to hungry
+    if(Human::hunger > 100){ //Dead because of hunger
         Human::hunger = 100;
         Human::health = 0;
     }
@@ -37,7 +42,12 @@ std::string Human::tick(){
     return what;
 }
 
-void Human::eat(){
+int Human::eat(){
+    /*
+    / Return codes:
+    /   1 - Everything is fine
+    /   2 - Can't afford food
+    */
     if(Human::money >= 20){
         Human::money -= 20;
         Food* food = new Food();
@@ -46,5 +56,7 @@ void Human::eat(){
         if(Human::hunger < 0){
             Human::hunger = 0;
         }
+        return 1;
     }
+    return 2;
 }

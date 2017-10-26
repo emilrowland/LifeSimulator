@@ -84,14 +84,6 @@ class TaskQueue{
             }
         }
     public:
-        void push(T obj, unsigned short int priority){
-            item* i = new item();
-            i->obj = obj;
-            i->priority = priority;
-            i->seq = TaskQueue::currentSeq++;
-            TaskQueue::heapArray[TaskQueue::endPos++] = i;
-            TaskQueue::bubbleUp(TaskQueue::endPos-1);
-        }
         T pop(){
             item* res = TaskQueue::heapArray[0];
             item* next = res->next;
@@ -189,6 +181,16 @@ class TaskQueue{
                 }
             }
             return false;
+        }
+        void push(T obj, unsigned short int priority){
+            if(!TaskQueue::changePriorityOfFirstMatch(obj, priority)){
+                item* i = new item();
+                i->obj = obj;
+                i->priority = priority;
+                i->seq = TaskQueue::currentSeq++;
+                TaskQueue::heapArray[TaskQueue::endPos++] = i;
+                TaskQueue::bubbleUp(TaskQueue::endPos-1);
+            }
         }
         bool addDependencie(T obj, T dependencie, short int dependenciePriority = -1){
             for(int i = 0; i < TaskQueue::endPos; i++){

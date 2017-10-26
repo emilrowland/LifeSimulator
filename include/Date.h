@@ -10,6 +10,8 @@ class Date{
         void add(Date date);
         void tick(int second=1);
         std::string toString();
+        bool operator <=(const Date& other);
+        bool operator <(const Date& other);
         unsigned short int second;
         unsigned short int minute;
         unsigned short int hour;

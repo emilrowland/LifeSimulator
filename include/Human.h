@@ -17,7 +17,7 @@ class Human
         float hunger = 0;
         std::string tick();
     protected:
-        void eat();
+        int eat();
     private:
         TaskQueue<std::string> todoQueue = TaskQueue<std::string>(50);
         Storage inventory = Storage(0.000546);
