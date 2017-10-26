@@ -2,3 +2,7 @@
 *.depend
 *.layout
 obj/
+*.cmake
+CMakeCache.txt
+Makefile
+CMakeFiles/
