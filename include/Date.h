@@ -5,21 +5,22 @@
 
 class Date{
     public:
-        Date(int year, int month, int day, int hour, int minute, int second);
+        Date(unsigned int year, unsigned short int month, unsigned short int day, unsigned short int hour, unsigned short int minute, unsigned short int second);
         virtual ~Date();
         void add(Date date);
-        void tick(int second=1);
+        void tick(unsigned short int second=1);
         std::string toString();
         bool operator <=(const Date& other);
         bool operator <(const Date& other);
+        bool operator ==(const Date& other);
         unsigned short int second;
         unsigned short int minute;
         unsigned short int hour;
         unsigned short int day;
         unsigned short int month;
         unsigned int year;
-    protected:
     private:
+        int daysInMonth[12] = {32, 29, 32, 31, 32, 31, 32, 32, 31, 32, 31, 32}; //Plus one for faster algorithms
 };
 
 #endif // DATE_H
