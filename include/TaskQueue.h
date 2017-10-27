@@ -192,22 +192,23 @@ class TaskQueue{
                 TaskQueue::bubbleUp(TaskQueue::endPos-1);
             }
         }
-        bool addDependencie(T obj, T dependencie, short int dependenciePriority = -1){
-            if(!TaskQueue::changePriority(dependencie, dependenciePriority)){ // TODO: need to move what I found and add it as an dependence
+        bool addDependence(T obj, T dependence, short int dependencePriority = -1){
+            if(!TaskQueue::changePriority(dependence, dependencePriority)){ // TODO: need to move what I found and add it as an dependence
                 for(int i = 0; i < TaskQueue::endPos; i++){
                     item* currentItem = TaskQueue::heapArray[i];
                     if(obj == currentItem->obj){
                         //Found
                         item* depItem = new item();
-                        depItem->obj = dependencie;
-                        if(dependenciePriority < currentItem->priority && dependenciePriority >= 0){
-                            depItem->priority = dependenciePriority;
+                        depItem->obj = dependence;
+                        if(dependencePriority < currentItem->priority && dependencePriority >= 0){
+                            depItem->priority = dependencePriority;
                         }else{
                             depItem->priority = currentItem->priority;
                         }
                         depItem->seq = currentItem->seq;
                         depItem->next = currentItem;
                         TaskQueue::heapArray[i] = depItem;
+                        TaskQueue::bubbleUp(i);
                         return true;
                     }
                 }
@@ -215,14 +216,14 @@ class TaskQueue{
             }
             return true;
         }
-        void addDependencieTop(T dependencie, short int dependenciePriority = -1){
-            if(!TaskQueue::changePriority(dependencie, dependenciePriority)){ // TODO: need to move what I found and add it as an dependence
+        void addDependenceTop(T dependence, short int dependencePriority = -1){
+            if(!TaskQueue::changePriority(dependence, dependencePriority)){ // TODO: need to move what I found and add it as an dependence
                 if(TaskQueue::endPos != 0){
                     item* currentItem = TaskQueue::heapArray[0];
                     item* depItem = new item();
-                    depItem->obj = dependencie;
-                    if(dependenciePriority < currentItem->priority && dependenciePriority >= 0){
-                        depItem->priority = dependenciePriority;
+                    depItem->obj = dependence;
+                    if(dependencePriority < currentItem->priority && dependencePriority >= 0){
+                        depItem->priority = dependencePriority;
                     }else{
                         depItem->priority = currentItem->priority;
                     }
