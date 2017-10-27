@@ -20,7 +20,7 @@ set(CATCH_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/libs/Catch)
 add_library(Catch INTERFACE)
 target_include_directories(Catch INTERFACE ${CATCH_INCLUDE_DIR})
 
-file(GLOB TEST_SOURCES "tests/*.cpp")
+file(GLOB TEST_SOURCES "tests/*.cpp" "src/Date.cpp")
 add_executable(unitTests ${TEST_SOURCES})
 target_link_libraries(unitTests Catch)
 

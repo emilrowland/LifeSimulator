@@ -4,7 +4,13 @@
 
 #include "Date.h"
 
-Date::Date(int year, int month, int day, int hour, int minute, int second){
+Date::Date(unsigned int year, unsigned short int month, unsigned short int day, unsigned short int hour, unsigned short int minute, unsigned short int second){
+    if(month > 12 || hour >= 24|| minute >= 60 || second >= 60){
+        throw std::invalid_argument("Not an valid Date!");
+    }
+    if(month > 0 && day > Date::daysInMonth[month-1]-1){
+        throw std::invalid_argument("Not an valid Date!");
+    }
     Date::year = year;
     Date::month = month;
     Date::day = day;
@@ -23,7 +29,6 @@ std::string Date::toString(){
 }
 
 void Date::add(Date date){
-    int daysInMonth[12] = {32, 29, 32, 31, 32, 31, 32, 32, 31, 32, 31, 32};
     int s = (Date::second + date.second);
     Date::second = s % 60;
     int m = (Date::minute + date.minute + s / 60);
@@ -31,11 +36,14 @@ void Date::add(Date date){
     int h = (Date::hour + date.hour + m / 60);
     Date::hour = h % 24;
     int d = (Date::day + date.day + h / 24);
-    Date::day = (d % daysInMonth[Date::month-1]);
+    Date::day = (d % Date::daysInMonth[Date::month-1]);
+    if(d >= Date::daysInMonth[Date::month-1]){
+        Date::day++;
+    }
     if(Date::day == 0){
         Date::day++;
     }
-    int mo = (Date::month + date.month + d / daysInMonth[Date::month-1]);
+    int mo = (Date::month + date.month + d / Date::daysInMonth[Date::month-1]);
     Date::month = mo % 13;
     if(Date::month == 0){
         Date::month++;
@@ -43,7 +51,7 @@ void Date::add(Date date){
     Date::year = (Date::year + date.year + mo / 13);
 }
 
-void Date::tick(int second){
+void Date::tick(unsigned short int second){
     if(second >= 60){
         throw std::invalid_argument("Not an valid Date!");
     }
@@ -116,4 +124,12 @@ bool Date::operator <(const Date& other){
         return false;
     }
     return false;//Should never come here
+}
+
+bool Date::operator ==(const Date& other){
+    if(this->year == other.year && this->month == other.month && this->day == other.day &&
+       this->hour == other.hour && this->minute == other.minute && this->second == other.second){
+        return true;
+    }
+    return false;
 }
