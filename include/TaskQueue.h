@@ -1,7 +1,7 @@
 #ifndef TASKQUEUE_H_INCLUDED
 #define TASKQUEUE_H_INCLUDED
 
-/*  Min priority queue with dependencies and preserve order
+/*  Min priority queue with dependencies, unique items and preserve order.
 /   The data structure uses an heap for the priority queue.
 /   To preserve order each object in the heap have an priority
 /   and sequence number. If multiple items has the same priority
@@ -117,7 +117,7 @@ class TaskQueue{
             }
             delete TaskQueue::heapArray;
         }
-        bool deleteFirstMatch(T obj){
+        bool deleteObj(T obj){
             for(int i = 0; i < TaskQueue::endPos; i++){
                 item* currentItem = TaskQueue::heapArray[i];
                 if(obj == currentItem->obj){
@@ -146,7 +146,7 @@ class TaskQueue{
             }
             return false;
         }
-        bool changePriorityOfFirstMatch(T obj, unsigned short int newPriority){
+        bool changePriority(T obj, unsigned short int newPriority){
             for(unsigned short int i = 0; i < TaskQueue::endPos; i++){
                 item* currentItem = TaskQueue::heapArray[i];
                 if(obj == currentItem->obj){
@@ -183,7 +183,7 @@ class TaskQueue{
             return false;
         }
         void push(T obj, unsigned short int priority){
-            if(!TaskQueue::changePriorityOfFirstMatch(obj, priority)){
+            if(!TaskQueue::changePriority(obj, priority)){
                 item* i = new item();
                 i->obj = obj;
                 i->priority = priority;
@@ -193,10 +193,32 @@ class TaskQueue{
             }
         }
         bool addDependencie(T obj, T dependencie, short int dependenciePriority = -1){
-            for(int i = 0; i < TaskQueue::endPos; i++){
-                item* currentItem = TaskQueue::heapArray[i];
-                if(obj == currentItem->obj){
-                    //Found
+            if(!TaskQueue::changePriority(dependencie, dependenciePriority)){ // TODO: need to move what I found and add it as an dependence
+                for(int i = 0; i < TaskQueue::endPos; i++){
+                    item* currentItem = TaskQueue::heapArray[i];
+                    if(obj == currentItem->obj){
+                        //Found
+                        item* depItem = new item();
+                        depItem->obj = dependencie;
+                        if(dependenciePriority < currentItem->priority && dependenciePriority >= 0){
+                            depItem->priority = dependenciePriority;
+                        }else{
+                            depItem->priority = currentItem->priority;
+                        }
+                        depItem->seq = currentItem->seq;
+                        depItem->next = currentItem;
+                        TaskQueue::heapArray[i] = depItem;
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return true;
+        }
+        void addDependencieTop(T dependencie, short int dependenciePriority = -1){
+            if(!TaskQueue::changePriority(dependencie, dependenciePriority)){ // TODO: need to move what I found and add it as an dependence
+                if(TaskQueue::endPos != 0){
+                    item* currentItem = TaskQueue::heapArray[0];
                     item* depItem = new item();
                     depItem->obj = dependencie;
                     if(dependenciePriority < currentItem->priority && dependenciePriority >= 0){
@@ -206,60 +228,10 @@ class TaskQueue{
                     }
                     depItem->seq = currentItem->seq;
                     depItem->next = currentItem;
-                    TaskQueue::heapArray[i] = depItem;
-                    return true;
+                    TaskQueue::heapArray[0] = depItem;
                 }
-            }
-            return false;
-        }
-        void addDependencieTop(T dependencie, short int dependenciePriority = -1){
-            if(TaskQueue::endPos != 0){
-                item* currentItem = TaskQueue::heapArray[0];
-                item* depItem = new item();
-                depItem->obj = dependencie;
-                if(dependenciePriority < currentItem->priority && dependenciePriority >= 0){
-                    depItem->priority = dependenciePriority;
-                }else{
-                    depItem->priority = currentItem->priority;
-                }
-                depItem->seq = currentItem->seq;
-                depItem->next = currentItem;
-                TaskQueue::heapArray[0] = depItem;
             }
         }
 };
-
-/*
-void test(){
-    TaskQueue<int> tasks = TaskQueue<int>(10);
-    for(int i = 5; i > 0; i--){
-        tasks.push(i,i);
-    }
-    for(int i = 0; i < 5; i++){
-        tasks.push(i,i);
-    }
-    tasks.print();
-    std::cout << tasks.pop() << std::endl;
-    tasks.print();
-    std::cout << "Deleted first 3" << std::endl;
-    tasks.deleteFirstMatch(3);
-    tasks.print();
-    std::cout << "Deleted first 5" << std::endl;
-    tasks.deleteFirstMatch(5);
-    tasks.print();
-    std::cout << "Deleted first 1" << std::endl;
-    tasks.deleteFirstMatch(1);
-    tasks.print();
-    std::cout << "Change priority on 1 to 99" << std::endl;
-    tasks.changePriorityOfFirstMatch(1, 99);
-    tasks.print();
-    std::cout << "Change priority on 3 to 0" << std::endl;
-    tasks.changePriorityOfFirstMatch(3, 0);
-    tasks.print();
-    while(!tasks.empty()){
-        std::cout << tasks.pop() << std::endl;
-    }
-}
-*/
 
 #endif // TASKQUEUE_H_INCLUDED
