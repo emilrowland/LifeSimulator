@@ -2,6 +2,7 @@
 #define DATE_H
 
 #include <string>
+#include <ostream>
 
 class DeltaTime{
     public:
@@ -20,6 +21,7 @@ class Date{
         void add(DeltaTime date);
         void tick(unsigned short int second=1);
         std::string toString();
+        std::ostream& operator << (std::ostream& os);
         bool operator <=(const Date& other);
         bool operator <(const Date& other);
         bool operator ==(const Date& other);
