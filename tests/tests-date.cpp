@@ -2,7 +2,7 @@
 #include "Date.h"
 #include <stdexcept>
 
-TEST_CASE( "Date", "[Date]" ) {
+TEST_CASE("Date", "[Date]"){
     Date refDate = Date(2017,10,27,12,10,10);
 
     SECTION("Dates"){
@@ -18,7 +18,6 @@ TEST_CASE( "Date", "[Date]" ) {
         CHECK_NOTHROW(Date(2017,10,31,23,59,59));
         CHECK_NOTHROW(Date(2017,11,30,23,59,59));
         CHECK_NOTHROW(Date(2017,12,31,23,59,59));
-        CHECK_NOTHROW(Date(0,0,0,0,0,59)); //Should only be used when adding to another date!
 
         CHECK_THROWS_AS(Date(2017,1,32,23,59,60), std::invalid_argument);
         CHECK_THROWS_AS(Date(2017,1,32,23,60,59), std::invalid_argument);
@@ -109,7 +108,7 @@ TEST_CASE( "Date", "[Date]" ) {
     SECTION("Add"){
         Date date = Date(2017,1,30,23,59,59);
         SECTION("Check days in month"){
-            Date addDate = Date(0,0,5,0,0,1);
+            DeltaTime addDate = DeltaTime(0,0,5,0,0,1);
             date.add(addDate);
             CHECK(date == Date(2017,2,5,0,0,0));
             date = Date(2017,2,27,23,59,59);
@@ -145,25 +144,25 @@ TEST_CASE( "Date", "[Date]" ) {
         }
         SECTION("Basic addition"){
             date = Date(2017,12,31,23,59,59);
-            date.add(Date(0,0,0,0,0,1));
+            date.add(DeltaTime(0,0,0,0,0,1));
             CHECK(date == Date(2018,1,1,0,0,0));
             date = Date(2017,12,31,23,59,59);
-            date.add(Date(0,0,0,0,1,0));
+            date.add(DeltaTime(0,0,0,0,1,0));
             CHECK(date == Date(2018,1,1,0,0,59));
             date = Date(2017,12,31,23,59,59);
-            date.add(Date(0,0,0,1,0,0));
+            date.add(DeltaTime(0,0,0,1,0,0));
             CHECK(date == Date(2018,1,1,0,59,59));
             date = Date(2017,12,31,23,59,59);
-            date.add(Date(0,0,1,0,0,0));
+            date.add(DeltaTime(0,0,1,0,0,0));
             CHECK(date == Date(2018,1,1,23,59,59));
             date = Date(2017,12,31,23,59,59);
-            date.add(Date(0,1,0,0,0,0));
+            date.add(DeltaTime(0,1,0,0,0,0));
             CHECK(date == Date(2018,1,31,23,59,59));
             date = Date(2017,12,31,23,59,59);
-            date.add(Date(1,0,0,0,0,0));
+            date.add(DeltaTime(1,0,0,0,0,0));
             CHECK(date == Date(2018,12,31,23,59,59));
             date = Date(2017,1,31,23,59,59);
-            date.add(Date(0,1,0,0,0,0));
+            date.add(DeltaTime(0,1,0,0,0,0));
             CHECK(date == Date(2018,3,3,23,59,59)); //Can't pass should probably use DeltaTime objects for addition.
         }
     }

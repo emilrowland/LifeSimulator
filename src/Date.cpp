@@ -4,6 +4,15 @@
 
 #include "Date.h"
 
+DeltaTime::DeltaTime(unsigned int year, unsigned int month, unsigned int day, unsigned int hour, unsigned int minute, unsigned int second){
+    DeltaTime::year = year;
+    DeltaTime::month = month;
+    DeltaTime::day = day;
+    DeltaTime::hour = hour;
+    DeltaTime::minute = minute;
+    DeltaTime::second = second;
+}
+
 Date::Date(unsigned int year, unsigned short int month, unsigned short int day, unsigned short int hour, unsigned short int minute, unsigned short int second){
     if(month > 12 || hour >= 24|| minute >= 60 || second >= 60){
         throw std::invalid_argument("Not an valid Date!");
@@ -19,16 +28,13 @@ Date::Date(unsigned int year, unsigned short int month, unsigned short int day, 
     Date::second = second;
 }
 
-Date::~Date(){
-}
-
 std::string Date::toString(){
     std::ostringstream oss;
     oss << Date::year << "-" << Date::month << "-" << Date::day << " " << Date::hour << ":" << Date::minute << ":" << Date::second;
     return oss.str();
 }
 
-void Date::add(Date date){
+void Date::add(DeltaTime date){
     int s = (Date::second + date.second);
     Date::second = s % 60;
     int m = (Date::minute + date.minute + s / 60);
@@ -55,7 +61,7 @@ void Date::tick(unsigned short int second){
     if(second >= 60){
         throw std::invalid_argument("Not an valid Date!");
     }
-    Date::add(Date(0,0,0,0,0,second));
+    Date::add(DeltaTime(0,0,0,0,0,second));
 }
 
 bool Date::operator <=(const Date& other){

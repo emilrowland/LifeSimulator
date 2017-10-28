@@ -6,7 +6,7 @@ using namespace std;
 
 int main(){
     Date date = Date(2017,6,1,12,0,0); //2017-06-01 12:00:00
-    Date runTime = Date(1,0,0,0,0,0);
+    DeltaTime runTime = DeltaTime(1,0,0,0,0,0);
     Date stopDate = date;
     stopDate.add(runTime);
     cout << "Creating Human" << endl;
