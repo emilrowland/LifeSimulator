@@ -2,6 +2,7 @@
 *.depend
 *.layout
 obj/
+bin/
 *.cmake
 CMakeCache.txt
 Makefile

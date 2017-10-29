@@ -1,7 +1,7 @@
 #include "catch.hpp"
 #include "TaskQueue.h"
 
-TEST_CASE( "TaskQueue", "[TaskQueue]" ) {
+TEST_CASE("TaskQueue", "[TaskQueue]"){
     TaskQueue<std::string> todoQueue = TaskQueue<std::string>(10);
 
     SECTION("Empty"){

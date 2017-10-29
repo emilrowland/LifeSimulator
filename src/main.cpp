@@ -6,7 +6,7 @@ using namespace std;
 
 int main(){
     Date date = Date(2017,6,1,12,0,0); //2017-06-01 12:00:00
-    Date runTime = Date(1,0,0,0,0,0);
+    DeltaTime runTime = DeltaTime(1,0,0,0,0,0);
     Date stopDate = date;
     stopDate.add(runTime);
     cout << "Creating Human" << endl;
@@ -15,7 +15,7 @@ int main(){
     while(date < stopDate){
         if(date.day == 1 && date.hour == 12 && date.minute == 0 && date.second == 0){
             cout << human1.firstName << " " << human1.lastName << endl;
-            cout << "Date: " << date.toString() << endl;
+            cout << "Date: " << date << endl;
             cout << "Health: " << human1.health << endl;
             cout << "Hunger: " << human1.hunger << endl;
             cout << "Money: " << human1.money << endl;
