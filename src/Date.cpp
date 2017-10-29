@@ -55,6 +55,16 @@ void Date::add(DeltaTime date){
         Date::month++;
     }
     Date::year = (Date::year + date.year + mo / 13);
+
+    //Calculate extra days
+    while(Date::day > (Date::daysInMonth[Date::month-1]-1)){
+        Date::day -= Date::daysInMonth[Date::month-1]-1;
+        Date::month++;
+        if(Date::month > 12){
+            Date::year++;
+            Date::month = 1;
+        }
+    }
 }
 
 void Date::tick(unsigned short int second){

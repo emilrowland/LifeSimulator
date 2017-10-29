@@ -163,7 +163,7 @@ TEST_CASE("Date", "[Date]"){
             CHECK(date == Date(2018,12,31,23,59,59));
             date = Date(2017,1,31,23,59,59);
             date.add(DeltaTime(0,1,0,0,0,0));
-            CHECK(date == Date(2018,3,3,23,59,59)); //Can't pass should probably use DeltaTime objects for addition.
+            CHECK(date == Date(2017,3,3,23,59,59)); //Can't pass should probably use DeltaTime objects for addition.
         }
     }
     SECTION("toString"){
