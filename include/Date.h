@@ -21,7 +21,10 @@ class Date{
         void add(DeltaTime date);
         void tick(unsigned short int second=1);
         std::string toString();
-        std::ostream& operator << (std::ostream& os);
+        friend std::ostream& operator<<(std::ostream& os, const Date& dt){
+            os << dt.year << "-" << dt.month << "-" << dt.day << " " << dt.hour << ":" << dt.minute << ":" << dt.second;
+            return os;
+        }
         bool operator <=(const Date& other);
         bool operator <(const Date& other);
         bool operator ==(const Date& other);

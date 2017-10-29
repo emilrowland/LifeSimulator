@@ -28,14 +28,9 @@ Date::Date(unsigned int year, unsigned short int month, unsigned short int day, 
     Date::second = second;
 }
 
-std::ostream& Date::operator << (std::ostream& os){
-	os << this->toString();
-	return os;
-}
-
 std::string Date::toString(){
     std::ostringstream oss;
-    oss << Date::year << "-" << Date::month << "-" << Date::day << " " << Date::hour << ":" << Date::minute << ":" << Date::second;
+    oss << *this;
     return oss.str();
 }
 

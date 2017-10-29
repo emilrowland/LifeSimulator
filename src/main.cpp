@@ -15,7 +15,7 @@ int main(){
     while(date < stopDate){
         if(date.day == 1 && date.hour == 12 && date.minute == 0 && date.second == 0){
             cout << human1.firstName << " " << human1.lastName << endl;
-            cout << "Date: " << date.toString() << endl;
+            cout << "Date: " << date << endl;
             cout << "Health: " << human1.health << endl;
             cout << "Hunger: " << human1.hunger << endl;
             cout << "Money: " << human1.money << endl;
