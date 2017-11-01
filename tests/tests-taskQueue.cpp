@@ -35,10 +35,27 @@ TEST_CASE( "TaskQueue", "[TaskQueue]" ) {
     SECTION("Change priority"){
         todoQueue.push("Task 1", 5);
         todoQueue.push("Task 2", 1);
-        todoQueue.changePriority("Task 1", 1);
-        REQUIRE(todoQueue.pop() == "Task 1");
-        REQUIRE(todoQueue.pop() == "Task 2");
-        REQUIRE(todoQueue.empty());
+        SECTION("Simple"){
+            todoQueue.changePriority("Task 1", 1);
+            REQUIRE(todoQueue.pop() == "Task 1");
+            REQUIRE(todoQueue.pop() == "Task 2");
+            REQUIRE(todoQueue.empty());
+        }
+        SECTION("Negative priority no dependence"){
+            todoQueue.changePriority("Task 1", -1);
+            REQUIRE(todoQueue.pop() == "Task 2");
+            REQUIRE(todoQueue.pop() == "Task 1");
+            REQUIRE(todoQueue.empty());
+        }
+        SECTION("Negative priority on dependence"){
+            todoQueue.addDependence("Task 1", "Task 3", 1);
+            todoQueue.changePriority("Task 1", -1);
+            REQUIRE(todoQueue.pop() == "Task 3");
+            REQUIRE(todoQueue.pop() == "Task 2");
+            REQUIRE(todoQueue.pop() == "Task 1");
+            REQUIRE(todoQueue.empty());
+        }
+
     }
     SECTION("Add dependence on top"){
         todoQueue.push("Task 1", 5);
@@ -94,6 +111,7 @@ TEST_CASE( "TaskQueue", "[TaskQueue]" ) {
         SECTION("Task to dependence 2"){
             todoQueue.push("Task 2", 10);
             todoQueue.addDependence("Task 1", "Task 2");
+            todoQueue.print();
             REQUIRE(todoQueue.pop() == "Task 2");
             REQUIRE(todoQueue.pop() == "Task 1");
             REQUIRE(todoQueue.empty());
