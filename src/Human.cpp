@@ -1,16 +1,14 @@
-//#include <iostream>
 #include "Food.h"
+#include "RandomGenerator.h"
 
 #include "Human.h"
 
 Human::Human(const Date* date){
+    RandomGenerator random = RandomGenerator(date->second + date->day);
     Human::simDate = date;
-    Human::firstName = "Emil";
-    Human::lastName = "Rowland";
+    Human::firstName = random.randomName(2,10);
+    Human::lastName = random.randomName(2,10);
     Human::busy = *date;
-}
-
-Human::~Human(){
 }
 
 std::string Human::tick(){

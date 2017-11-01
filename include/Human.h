@@ -10,7 +10,6 @@ class Human
 {
     public:
         Human(const Date* date);
-        virtual ~Human();
         std::string firstName;
         std::string lastName;
         Date busy = Date(1,1,1,1,1,1);//Need to init to something
