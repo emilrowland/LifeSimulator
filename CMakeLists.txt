@@ -8,6 +8,10 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
 include_directories(include)
 
+#########################################################################
+# Main program executable
+#########################################################################
+
 file(GLOB SOURCES "src/*.cpp" "include/*.h") #Selects all c++ files
 set(CMAKE_CXX_STANDARD 11) #Use C++11
 add_executable(LifeSimulator ${SOURCES})

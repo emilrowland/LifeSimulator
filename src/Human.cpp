@@ -3,9 +3,11 @@
 
 #include "Human.h"
 
-Human::Human(){
+Human::Human(const Date* date){
+    Human::simDate = date;
     Human::firstName = "Emil";
     Human::lastName = "Rowland";
+    Human::busy = *date;
 }
 
 Human::~Human(){
@@ -23,8 +25,11 @@ std::string Human::tick(){
             }else{
                 what = "Eat";
                 Human::todoQueue.pop();
+                Human::busy.add(DeltaTime(0,0,0,0,15,0)); //Eat for 15min
             }
         }
+        //Nothing to do
+        Human::busy.tick(1);
     }
     if(Human::hunger > 25){
         Human::todoQueue.push("Eat", 1);

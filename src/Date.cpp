@@ -28,6 +28,15 @@ Date::Date(unsigned int year, unsigned short int month, unsigned short int day, 
     Date::second = second;
 }
 
+Date::Date(const Date& obj){
+    Date::year = obj.year;
+    Date::month = obj.month;
+    Date::day = obj.day;
+    Date::hour = obj.hour;
+    Date::minute = obj.minute;
+    Date::second = obj.second;
+}
+
 std::string Date::toString(){
     std::ostringstream oss;
     oss << *this;

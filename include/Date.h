@@ -18,6 +18,7 @@ class DeltaTime{
 class Date{
     public:
         Date(unsigned int year, unsigned short int month, unsigned short int day, unsigned short int hour, unsigned short int minute, unsigned short int second);
+        Date(const Date& obj);
         void add(DeltaTime date);
         void tick(unsigned short int second=1);
         std::string toString();
