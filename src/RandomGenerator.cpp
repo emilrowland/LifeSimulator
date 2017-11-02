@@ -6,6 +6,7 @@ RandomGenerator::RandomGenerator(int seed = 50062){
 
 std::vector<int> RandomGenerator::randomIntegers(int min, int max, unsigned int N){
     std::vector<int> res;
+    res.reserve(N);
     std::mt19937 rng(RandomGenerator::seed + RandomGenerator::seq);
     std::uniform_int_distribution<int> gen(min, max);
     for(unsigned int i = 0; i < N; i++){
@@ -23,11 +24,26 @@ int RandomGenerator::randomInteger(int min, int max){
 }
 
 std::string RandomGenerator::randomName(unsigned int min, unsigned int max){
-    std::string res = "";
+    std::string res;
     int n = RandomGenerator::randomInteger(min, max);
-    std::vector<int> ri = RandomGenerator::randomIntegers(0, RandomGenerator::length_validCharacters - 1, n);
+    res.reserve(n);
+    std::vector<int> ri = RandomGenerator::randomIntegers(0, RandomGenerator::validCharacters.length() - 1, n);
     for(int i = 0; i < n; i++){
         res += RandomGenerator::validCharacters[ri[i]];
+    }
+    //Check if name contains vowel
+    bool c = false;
+    for(int i = 0; i < RandomGenerator::vowels.length(); i++){
+        if(res.find(RandomGenerator::vowels[i]) == std::string::npos){
+            c = true;
+            break;
+        }
+    }
+    //If there is no vowels then add one at an random place.
+    if(!c){
+        int r = RandomGenerator::randomInteger(min, n - 1);
+        int p = RandomGenerator::randomInteger(0, RandomGenerator::vowels.length() - 1);
+        res[r] = RandomGenerator::vowels[p];
     }
     res[0] = toupper(res[0]);
     return res;

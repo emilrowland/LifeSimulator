@@ -18,6 +18,7 @@ class RandomGenerator
     protected:
     private:
         const std::string validCharacters = "abcdefghijklmnopqrstuvwxyz";
+        const std::string vowels = "aeiou";
         const unsigned int length_validCharacters = RandomGenerator::validCharacters.length();
 };
 
