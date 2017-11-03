@@ -8,7 +8,7 @@
 class Storage
 {
     public:
-        Storage(int maxVolume);
+        Storage(float maxVolume);
         virtual ~Storage();
         float volume;//m^3
         float maxVolume;//m^3

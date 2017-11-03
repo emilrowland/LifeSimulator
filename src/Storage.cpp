@@ -1,6 +1,6 @@
 #include "Storage.h"
 
-Storage::Storage(int maxVolume){
+Storage::Storage(float maxVolume){
     Storage::maxVolume = maxVolume;
     Storage::volume = 0;
     Storage::mass = 0;

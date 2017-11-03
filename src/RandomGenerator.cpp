@@ -1,6 +1,6 @@
 #include "RandomGenerator.h"
 
-RandomGenerator::RandomGenerator(int seed = 50062){
+RandomGenerator::RandomGenerator(int seed){
     RandomGenerator::seed = seed;
 }
 

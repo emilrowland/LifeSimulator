@@ -9,7 +9,7 @@
 class RandomGenerator
 {
     public:
-        RandomGenerator(int seed);
+        RandomGenerator(int seed = 50062);
         int seed;
         unsigned int seq = 0;
         std::vector<int> randomIntegers(int min, int max, unsigned int N);
