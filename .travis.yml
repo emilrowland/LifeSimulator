@@ -2,7 +2,7 @@ language: c++
 compiler: clang
 script:
   - cmake -DCMAKE_BUILD_TYPE=Release
-  - make
+  - make -j -l1
   - bin/unitTests
 addons:
   apt:
