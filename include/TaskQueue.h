@@ -19,6 +19,7 @@
 
 #include <iostream>
 #include <vector>
+#include <stdexcept>
 
 template <class T>
 class TaskQueue{
@@ -46,7 +47,13 @@ class TaskQueue{
         }
         void print(){
             for(unsigned short int i = 0; i < TaskQueue::endPos; i++){
-                std::cout << "Priority: " << TaskQueue::heapArray[i]->priority << " Seq: " << TaskQueue::heapArray[i]->seq << " Object: " << TaskQueue::heapArray[i]->obj << std::endl;
+                std::cout << "Priority: " << TaskQueue::heapArray[i]->priority << " Seq: " << TaskQueue::heapArray[i]->seq << " Object: " << TaskQueue::heapArray[i]->obj;
+                item* current = TaskQueue::heapArray[i];
+                while(current->next){
+                    current = current->next;
+                    std::cout << " --> Priority: " << current->priority << " Seq: " << current->seq << " Object: " << current->obj;
+                }
+                std::cout << std::endl;
             }
         }
     private:
@@ -85,23 +92,28 @@ class TaskQueue{
         }
     public:
         T pop(){
-            item* res = TaskQueue::heapArray[0];
-            item* next = res->next;
-            T ret = res->obj;
-            delete res;
-            if(next){
-                TaskQueue::heapArray[0] = next;
+            if(!TaskQueue::empty()){
+                item* res = TaskQueue::heapArray[0];
+                item* next = res->next;
+                T ret = res->obj;
+                delete res;
+                if(next){
+                    TaskQueue::heapArray[0] = next;
 
-            }else if(endPos <= 1){
-                TaskQueue::currentSeq = 0;
-                TaskQueue::endPos = 0;
+                }else if(endPos <= 1){
+                    TaskQueue::currentSeq = 0;
+                    TaskQueue::endPos = 0;
+                    return ret;
+                }else{
+                    TaskQueue::heapArray[0] = TaskQueue::heapArray[TaskQueue::endPos-1];
+                    TaskQueue::endPos--;
+                }
+                TaskQueue::bubbleDown(0);
                 return ret;
             }else{
-                TaskQueue::heapArray[0] = TaskQueue::heapArray[TaskQueue::endPos-1];
-                TaskQueue::endPos--;
+                throw std::domain_error("The queue is empty!");
             }
-            TaskQueue::bubbleDown(0);
-            return ret;
+
         }
         T top(){return TaskQueue::heapArray[0]->obj;}
         bool empty(){
@@ -226,20 +238,63 @@ class TaskQueue{
                 for(int i = 0; i < TaskQueue::endPos; i++){
                     item* currentItem = TaskQueue::heapArray[i];
                     if(obj == currentItem->obj){
-                        //Found where to move or dependence.
+                        //Found where to move our dependence.
                         for(int j = 0; j < TaskQueue::endPos; j++){
                             item* currentItem2 = TaskQueue::heapArray[j];
                             if(dependence == currentItem2->obj){
-                                //Found or dependence
-
+                                //Found our dependence
+                                if(currentItem2->next){
+                                    TaskQueue::heapArray[j] = currentItem2->next;
+                                    currentItem2->next = currentItem;
+                                    currentItem2->seq = currentItem->seq;
+                                    if(dependencePriority < currentItem->priority && dependencePriority >= 0){
+                                        currentItem2->priority = dependencePriority;
+                                    }else if(currentItem->priority < currentItem2->priority){
+                                        currentItem2->priority = currentItem->priority;
+                                    }
+                                    //Move
+                                    TaskQueue::heapArray[i] = currentItem2;
+                                }else{
+                                    currentItem2->next = currentItem;
+                                    currentItem2->seq = currentItem->seq;
+                                    if(dependencePriority < currentItem->priority && dependencePriority >= 0){
+                                        currentItem2->priority = dependencePriority;
+                                    }else if(currentItem->priority < currentItem2->priority){
+                                        currentItem2->priority = currentItem->priority;
+                                    }
+                                    //Move
+                                    TaskQueue::heapArray[i] = currentItem2;
+                                    if(j == endPos-1){
+                                        TaskQueue::endPos--;
+                                    }else{
+                                        TaskQueue::heapArray[j] = TaskQueue::heapArray[TaskQueue::endPos-1];
+                                        TaskQueue::endPos--;
+                                    }
+                                }
+                                TaskQueue::bubbleDown(j); //Sort
+                                TaskQueue::bubbleUp(i);
                                 return true;
                             }
                             item* prevItem2 = currentItem2;
                             while(prevItem2->next){
                                 currentItem2 = prevItem2->next;
                                 if(dependence == currentItem2->obj){
-                                    //Found or dependence
-
+                                    //Found our dependence
+                                    if(currentItem2->next){
+                                        prevItem2->next = currentItem2->next;
+                                    }else{
+                                        prevItem2->next = nullptr;
+                                    }
+                                    currentItem2->next = currentItem;
+                                    currentItem2->seq = currentItem->seq;
+                                    if(dependencePriority < currentItem->priority && dependencePriority >= 0){
+                                        currentItem2->priority = dependencePriority;
+                                    }else if(currentItem->priority < currentItem2->priority){
+                                        currentItem2->priority = currentItem->priority;
+                                    }
+                                    //Move
+                                    TaskQueue::heapArray[i] = currentItem2;
+                                    TaskQueue::bubbleUp(i);
                                     return true;
                                 }
                                 prevItem2 = currentItem2;

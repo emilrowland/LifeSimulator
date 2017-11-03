@@ -9,6 +9,10 @@ TEST_CASE("TaskQueue", "[TaskQueue]"){
         todoQueue.push("Task 1", 5);
         REQUIRE(!todoQueue.empty());
     }
+    SECTION("Pop empty"){
+        REQUIRE(todoQueue.empty());
+        CHECK_THROWS_AS(todoQueue.pop().empty(), std::domain_error);
+    }
     SECTION("Add task"){
         todoQueue.push("Task 1", 5);
         todoQueue.push("Task 2", 1);
@@ -111,9 +115,26 @@ TEST_CASE("TaskQueue", "[TaskQueue]"){
         SECTION("Task to dependence 2"){
             todoQueue.push("Task 2", 10);
             todoQueue.addDependence("Task 1", "Task 2");
-            todoQueue.print();
             REQUIRE(todoQueue.pop() == "Task 2");
             REQUIRE(todoQueue.pop() == "Task 1");
+            REQUIRE(todoQueue.empty());
+        }
+        SECTION("Task to dependence 3"){
+            todoQueue.push("Task 2", 10);
+            todoQueue.addDependence("Task 2", "Task 3");
+            todoQueue.addDependence("Task 1", "Task 3");
+            REQUIRE(todoQueue.pop() == "Task 3");
+            REQUIRE(todoQueue.pop() == "Task 1");
+            REQUIRE(todoQueue.pop() == "Task 2");
+            REQUIRE(todoQueue.empty());
+        }
+        SECTION("Task to dependence 4"){
+            todoQueue.push("Task 2", 10);
+            todoQueue.addDependence("Task 2", "Task 3");
+            todoQueue.addDependence("Task 1", "Task 2");
+            REQUIRE(todoQueue.pop() == "Task 2");
+            REQUIRE(todoQueue.pop() == "Task 1");
+            REQUIRE(todoQueue.pop() == "Task 3");
             REQUIRE(todoQueue.empty());
         }
     }
