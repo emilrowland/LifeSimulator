@@ -146,33 +146,41 @@ class TaskQueue{
             }
             return false;
         }
-        bool changePriority(T obj, unsigned short int newPriority){
+        bool changePriority(T obj, short int newPriority){
             for(unsigned short int i = 0; i < TaskQueue::endPos; i++){
                 item* currentItem = TaskQueue::heapArray[i];
                 if(obj == currentItem->obj){
                     //Found
-                    unsigned short int oldPriority = currentItem->priority;
-                    currentItem->priority = newPriority;
-                    if(oldPriority < newPriority){
-                        TaskQueue::bubbleDown(i);
-                    }else if(oldPriority > newPriority){
-                        TaskQueue::bubbleUp(i);
+                    if(newPriority >= 0){
+                        unsigned short int oldPriority = currentItem->priority;
+                        currentItem->priority = newPriority;
+                        if(oldPriority < newPriority){
+                            TaskQueue::bubbleDown(i);
+                        }else if(oldPriority > newPriority){
+                            TaskQueue::bubbleUp(i);
+                        }
                     }
                     return true;
                 }
                 std::vector<item*> prevItems;
                 item* prevItem = currentItem;
+                int smallestPriority = newPriority;
                 while(prevItem->next){
                     prevItems.push_back(prevItem);
                     currentItem = prevItem->next;
                     if(obj == currentItem->obj){
                         //Found
+                        if(newPriority < 0){
+                            if(smallestPriority == -1 || currentItem->priority < smallestPriority){
+                                smallestPriority = currentItem->priority;
+                            }
+                        }
                         unsigned short int oldPriority = currentItem->priority;
-                        currentItem->priority = newPriority;
-                        if(oldPriority > newPriority){
+                        currentItem->priority = smallestPriority;
+                        if(oldPriority > smallestPriority){
                             //Change priority on all the items before.
                             for(unsigned int i = 0; i < prevItems.size(); i++){
-                                prevItems.at(i)->priority = newPriority;
+                                prevItems.at(i)->priority = smallestPriority;
                             }
                         }
                         return true;
@@ -213,8 +221,36 @@ class TaskQueue{
                     }
                 }
                 return false;
+            }else{
+                //Move the existing dependence object as an dependence on obj.
+                for(int i = 0; i < TaskQueue::endPos; i++){
+                    item* currentItem = TaskQueue::heapArray[i];
+                    if(obj == currentItem->obj){
+                        //Found where to move or dependence.
+                        for(int j = 0; j < TaskQueue::endPos; j++){
+                            item* currentItem2 = TaskQueue::heapArray[j];
+                            if(dependence == currentItem2->obj){
+                                //Found or dependence
+
+                                return true;
+                            }
+                            item* prevItem2 = currentItem2;
+                            while(prevItem2->next){
+                                currentItem2 = prevItem2->next;
+                                if(dependence == currentItem2->obj){
+                                    //Found or dependence
+
+                                    return true;
+                                }
+                                prevItem2 = currentItem2;
+                            }
+                        }
+
+                    }
+                }
+                return false;
             }
-            return true;
+            return false;
         }
         void addDependenceTop(T dependence, short int dependencePriority = -1){
             if(!TaskQueue::changePriority(dependence, dependencePriority)){ // TODO: need to move what I found and add it as an dependence
