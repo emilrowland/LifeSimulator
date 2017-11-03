@@ -83,7 +83,7 @@ void Date::tick(unsigned short int second){
     Date::add(DeltaTime(0,0,0,0,0,second));
 }
 
-bool Date::operator <=(const Date& other){
+bool Date::operator <=(const Date& other) const{
     if(this->year < other.year){
         return true;
     }else if(this->year > other.year){
@@ -117,7 +117,7 @@ bool Date::operator <=(const Date& other){
     return true; //They are equal
 }
 
-bool Date::operator <(const Date& other){
+bool Date::operator <(const Date& other) const{
     if(this->year < other.year){
         return true;
     }else if(this->year > other.year){
@@ -151,7 +151,7 @@ bool Date::operator <(const Date& other){
     return false;//Should never come here
 }
 
-bool Date::operator ==(const Date& other){
+bool Date::operator ==(const Date& other) const{
     if(this->year == other.year && this->month == other.month && this->day == other.day &&
        this->hour == other.hour && this->minute == other.minute && this->second == other.second){
         return true;

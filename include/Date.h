@@ -26,9 +26,9 @@ class Date{
             os << dt.year << "-" << dt.month << "-" << dt.day << " " << dt.hour << ":" << dt.minute << ":" << dt.second;
             return os;
         }
-        bool operator <=(const Date& other);
-        bool operator <(const Date& other);
-        bool operator ==(const Date& other);
+        bool operator <=(const Date& other) const;
+        bool operator <(const Date& other) const;
+        bool operator ==(const Date& other) const;
         unsigned short int second;
         unsigned short int minute;
         unsigned short int hour;
