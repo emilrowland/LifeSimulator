@@ -1,21 +1,34 @@
 language: c++
 sudo: false
-os:
-  - linux
-  - osx
-compiler: 
-  - clang
-  - gcc
+
 script:
   - cmake -DCMAKE_BUILD_TYPE=Release
   - make -j
   - bin/unitTests
+  
+matrix:
+  include:
+    - os: linux
+    compiler: gcc
+    addons: &gcc49
+      apt:
+        sources: ['ubuntu-toolchain-r-test']
+        packages: ['g++-4.9']
+  - os: linux
+    compiler: clang
+    addons: &clang35
+      apt:
+        sources: ['llvm-toolchain-precise-3.5', 'ubuntu-toolchain-r-test']
+        packages: ['clang-3.5']
+  - os: osx
+    compiler: clang
+  
+  
+  
 addons:
   apt:
     sources:
       - george-edison55-precise-backports
-      - ubuntu-toolchain-r-test
     packages:
       - cmake-data
       - cmake
-      - g++-5
