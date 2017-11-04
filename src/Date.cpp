@@ -4,6 +4,15 @@
 
 #include "Date.h"
 
+DeltaTime::DeltaTime(){
+    DeltaTime::year = 0;
+    DeltaTime::month = 0;
+    DeltaTime::day = 0;
+    DeltaTime::hour = 0;
+    DeltaTime::minute = 0;
+    DeltaTime::second = 0;
+}
+
 DeltaTime::DeltaTime(unsigned int year, unsigned int month, unsigned int day, unsigned int hour, unsigned int minute, unsigned int second){
     DeltaTime::year = year;
     DeltaTime::month = month;
@@ -11,6 +20,15 @@ DeltaTime::DeltaTime(unsigned int year, unsigned int month, unsigned int day, un
     DeltaTime::hour = hour;
     DeltaTime::minute = minute;
     DeltaTime::second = second;
+}
+
+Date::Date(){
+    Date::year = 0;
+    Date::month = 0;
+    Date::day = 0;
+    Date::hour = 0;
+    Date::minute = 0;
+    Date::second = 0;
 }
 
 Date::Date(unsigned int year, unsigned short int month, unsigned short int day, unsigned short int hour, unsigned short int minute, unsigned short int second){
@@ -35,6 +53,16 @@ Date::Date(const Date& obj){
     Date::hour = obj.hour;
     Date::minute = obj.minute;
     Date::second = obj.second;
+}
+
+Date::Date(std::string str){
+    //Phrase string as yyyy-mm-dd hh:mm:ss
+    Date::year = std::stoi(str.substr(0,4));
+    Date::month = std::stoi(str.substr(5,2));
+    Date::day = std::stoi(str.substr(8,2));
+    Date::hour = std::stoi(str.substr(11,2));
+    Date::minute = std::stoi(str.substr(14,2));
+    Date::second = std::stoi(str.substr(17,2));
 }
 
 std::string Date::toString(){

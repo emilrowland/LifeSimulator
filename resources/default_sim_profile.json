@@ -1,0 +1,9 @@
+{
+    "StartDate": "2017-06-01 12:00:00",
+    "SimDuration": {
+        "years": 1
+    },
+    "Humans": {
+        "StartNum": 2
+    }
+}

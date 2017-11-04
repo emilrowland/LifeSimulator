@@ -36,6 +36,12 @@ TEST_CASE("Date", "[Date]"){
         CHECK_THROWS_WITH(Date(2017,11,31,23,59,59), "Not an valid Date!");
         CHECK_THROWS_WITH(Date(2017,12,32,23,59,59), "Not an valid Date!");
     }
+    SECTION("String to Date"){
+        Date date = Date("2017-10-27 12:10:10");
+        REQUIRE(date == refDate);
+        date = Date("2013-05-02 01:02:00");
+        REQUIRE(date == Date(2013,5,2,1,2,0));
+    }
     SECTION("Less than"){
         REQUIRE(Date(2017,10,27,12,10,9) < refDate);
         REQUIRE(Date(2017,10,27,12,9,10) < refDate);

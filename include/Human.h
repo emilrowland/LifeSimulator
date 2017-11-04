@@ -12,7 +12,7 @@ class Human
         Human(const Date* date, int seed = -1);
         std::string firstName;
         std::string lastName;
-        Date busy = Date(1,1,1,1,1,1);//Need to init to something
+        Date busy;
         int fastForward = 1;
         float health = 100;
         float money = 10000;
