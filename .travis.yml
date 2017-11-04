@@ -18,4 +18,4 @@ addons:
     packages:
       - cmake-data
       - cmake
-      - g++-4.9
+      - g++-5
