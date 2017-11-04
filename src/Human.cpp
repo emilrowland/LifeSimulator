@@ -3,8 +3,11 @@
 
 #include "Human.h"
 
-Human::Human(const Date* date){
-    RandomGenerator random = RandomGenerator(date->second + date->day);
+Human::Human(const Date* date, int seed){
+    if(seed == -1){
+        seed = date->second + date->day;
+    }
+    RandomGenerator random = RandomGenerator(seed);
     Human::simDate = date;
     Human::firstName = random.randomName(2,10);
     Human::lastName = random.randomName(2,10);
@@ -24,23 +27,26 @@ std::string Human::tick(){
                 what = "Eat";
                 Human::todoQueue.pop();
                 Human::busy.add(DeltaTime(0,0,0,0,15,0)); //Eat for 15min
+                fastForward = 15*60;
             }
         }
-        //Nothing to do
-        Human::busy.tick(1);
     }
     if(Human::hunger > 25){
         Human::todoQueue.push("Eat", 1);
     }else if(Human::hunger > 6){
         Human::todoQueue.push("Eat", 5);
     }
-    Human::hunger += 0.0002;
+    Human::hunger += 0.0002 * fastForward;
     if(Human::hunger > 100){ //Dead because of hunger
         Human::hunger = 100;
         Human::health = 0;
     }
     if(Human::health <= 0){
         return "Died";
+    }
+    if(Human::busy <= *Human::simDate){
+        Human::busy.tick(1);
+        fastForward = 1;
     }
     return what;
 }
