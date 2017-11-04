@@ -6,6 +6,9 @@ script:
   - make -j
   - bin/unitTests
   
+before_script:
+  - export CXX=${COMPILER}
+  
 matrix:
   include:
     - os: linux
@@ -14,17 +17,17 @@ matrix:
         apt:
           sources: ['ubuntu-toolchain-r-test']
           packages: ['g++-4.9']
+      env: COMPILER='g++-4.9'
     - os: linux
       compiler: clang
       addons: &clang35
         apt:
           sources: ['llvm-toolchain-precise-3.5', 'ubuntu-toolchain-r-test']
           packages: ['clang-3.5']
+      env: COMPILER='clang-3.5'
     - os: osx
       compiler: clang
-  
-  
-  
+      env: COMPILER='clang'
 addons:
   apt:
     sources:
