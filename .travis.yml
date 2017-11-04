@@ -9,19 +9,19 @@ script:
 matrix:
   include:
     - os: linux
-    compiler: gcc
-    addons: &gcc49
-      apt:
-        sources: ['ubuntu-toolchain-r-test']
-        packages: ['g++-4.9']
-  - os: linux
-    compiler: clang
-    addons: &clang35
-      apt:
-        sources: ['llvm-toolchain-precise-3.5', 'ubuntu-toolchain-r-test']
-        packages: ['clang-3.5']
-  - os: osx
-    compiler: clang
+      compiler: gcc
+      addons: &gcc49
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-4.9']
+    - os: linux
+      compiler: clang
+      addons: &clang35
+        apt:
+          sources: ['llvm-toolchain-precise-3.5', 'ubuntu-toolchain-r-test']
+          packages: ['clang-3.5']
+    - os: osx
+      compiler: clang
   
   
   
