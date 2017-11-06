@@ -1,12 +1,14 @@
 #include <fstream>
 #include "JSON/json.hpp"
+#include "Utility.h"
+#include <iostream>
 
 #include "SimConfigurations.h"
 
 using json = nlohmann::json;
 
 SimConfigurations::SimConfigurations(std::string confFilePath){
-    std::ifstream i(confFilePath);
+    std::ifstream i(Utility::getExecutablePath() + confFilePath);
     json simConfigJSON;
     i >> simConfigJSON;
     SimConfigurations::startDate = new Date(simConfigJSON["StartDate"].get<std::string>());
