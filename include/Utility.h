@@ -4,7 +4,7 @@
 #include <string>
 
 namespace Utility{
-    std::string getExecuteblePath();
+    std::string getExecutablePath();
 }
 
 #endif // UTILITY_H

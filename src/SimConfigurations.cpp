@@ -8,7 +8,7 @@
 using json = nlohmann::json;
 
 SimConfigurations::SimConfigurations(std::string confFilePath){
-    std::ifstream i(Utility::getExecuteblePath() + confFilePath);
+    std::ifstream i(Utility::getExecutablePath() + confFilePath);
     json simConfigJSON;
     i >> simConfigJSON;
     SimConfigurations::startDate = new Date(simConfigJSON["StartDate"].get<std::string>());
