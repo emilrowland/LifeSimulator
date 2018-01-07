@@ -5,11 +5,13 @@
 #include "TaskQueue.h"
 #include "Storage.h"
 #include "Date.h"
+#include "SimReporter.h"
 
 class Human
 {
     public:
-        Human(const Date* date, int seed = -1);
+        Human(const Date* date, char* id, SimReporter* simReporter, int seed = -1);
+        char* id;
         std::string firstName;
         std::string lastName;
         Date busy;
@@ -24,6 +26,7 @@ class Human
         TaskQueue<std::string> todoQueue = TaskQueue<std::string>(50);
         Storage inventory = Storage(0.000546);
         const Date* simDate;
+        SimReporter* simReporter;
 };
 
 class HumanComparatorBussy {

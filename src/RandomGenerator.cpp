@@ -27,9 +27,9 @@ std::string RandomGenerator::randomName(unsigned int min, unsigned int max){
     std::string res;
     int n = RandomGenerator::randomInteger(min, max);
     res.reserve(n);
-    std::vector<int> ri = RandomGenerator::randomIntegers(0, RandomGenerator::validCharacters.length() - 1, n);
+    std::vector<int> ri = RandomGenerator::randomIntegers(0, RandomGenerator::validNameCharacters.length() - 1, n);
     for(int i = 0; i < n; i++){
-        res += RandomGenerator::validCharacters[ri[i]];
+        res += RandomGenerator::validNameCharacters[ri[i]];
     }
     //Check if name contains vowel
     bool c = false;
@@ -47,4 +47,13 @@ std::string RandomGenerator::randomName(unsigned int min, unsigned int max){
     }
     res[0] = toupper(res[0]);
     return res;
+}
+
+char* RandomGenerator::randomId(unsigned int length){
+    char *id = new char[length];
+    std::vector<int> ri = RandomGenerator::randomIntegers(0, RandomGenerator::validCharacters.length() - 1, length);
+    for(int i = 0; i < length; i++){
+        id[i] = RandomGenerator::validCharacters[ri[i]];
+    }
+    return id;
 }

@@ -15,9 +15,11 @@ class RandomGenerator
         std::vector<int> randomIntegers(int min, int max, unsigned int N);
         int randomInteger(int min, int max);
         std::string randomName(unsigned int min, unsigned int max);
+        char* randomId(unsigned int length);
     protected:
     private:
-        const std::string validCharacters = "abcdefghijklmnopqrstuvwxyz";
+        const std::string validNameCharacters = "abcdefghijklmnopqrstuvwxyz";
+        const std::string validCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-";
         const std::string vowels = "aeiou";
         const unsigned int length_validCharacters = RandomGenerator::validCharacters.length();
 };

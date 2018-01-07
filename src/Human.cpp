@@ -3,12 +3,15 @@
 
 #include "Human.h"
 
-Human::Human(const Date* date, int seed){
+Human::Human(const Date* date, char* id, SimReporter* simReporter, int seed){
+    Human::id = id;
+    Human::simReporter = simReporter;
     if(seed == -1){
         seed = date->second + date->day;
     }
     RandomGenerator random = RandomGenerator(seed);
     Human::simDate = date;
+    simReporter->setHumanBornDate(id, *date);
     Human::firstName = random.randomName(2,10);
     Human::lastName = random.randomName(2,10);
     Human::busy = *date;
@@ -42,6 +45,7 @@ std::string Human::tick(){
         Human::health = 0;
     }
     if(Human::health <= 0){
+        Human::simReporter->setHumanDieDate(Human::id, *Human::simDate);
         return "Died";
     }
     if(Human::busy <= *Human::simDate){
